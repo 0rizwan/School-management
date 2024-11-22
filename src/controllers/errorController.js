@@ -1,6 +1,9 @@
+import {ApiError} from '../utils/ApiError.js'
+
+
 const handleCastErrorDB = err => {
   const message = `Invalid ${err.path}: ${err.value}.`
-  const error = new AppError(message, 400)
+  const error = new ApiError(400,message)
   console.log(error, "handle")
   return error;
 }
@@ -9,7 +12,7 @@ const handleDuplicateFieldsDB = err => {
   const field = Object.keys(err.keyValue);
   const value = Object.values(err.keyValue);
   message = `Duplicate field value: ${value}. Please use another value!`
-  return new AppError(message, 400)
+  return new ApiError(400,message)
 }
 
 const handleValidationErrorDB = err => {
@@ -19,14 +22,14 @@ const handleValidationErrorDB = err => {
 
   const message = `Invalid input data. ${errors.join('. ')}`;
   console.log(message, "message")
-  return new AppError(message, 400);
+  return new ApiError(400, message);
 }
 
 const handleJWTError = () => {
-  return new AppError('Invalid token. Please log in again', 401)
+  return new ApiError(401,'Invalid token. Please log in again')
 }
 
-const handleJWTExpiredError = () => new AppError('Your token has expired! Please log in again', 401);
+const handleJWTExpiredError = () => new ApiError(401,'Your token has expired! Please log in again');
 
 // const sendErrorDev = (err, req, res) => {
 //   //A) Api
