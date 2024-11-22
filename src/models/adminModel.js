@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
+
 
 // Define the admin schema
-const adminSchema = new Schema({
+const adminSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -36,7 +37,6 @@ const adminSchema = new Schema({
 });
 
 // Middleware to hash the password before saving the admin
-const bcrypt = require('bcrypt');
 adminSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
     this.password = await bcrypt.hash(this.password, 10);
@@ -52,4 +52,4 @@ adminSchema.methods.isValidPassword = async function (password) {
 // Create the Admin model from the schema
 const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = Admin;
+export default Admin;
