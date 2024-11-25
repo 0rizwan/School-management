@@ -1,6 +1,7 @@
 import { ApiError } from "../utils/ApiError.js"
 import jwt from "jsonwebtoken"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 
 const signToken = (id) => {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -41,3 +42,18 @@ export const restrictTo = (...roles) => {
     }
 
 }
+
+export const isAuthenticated = (Model) => AsyncHandler(async (req, res, next) => {
+    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+    console.log(Model, "Model")
+    if (!token) {
+        return next(new ApiError(401, "Unauthorized request"));
+    }
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const user = await Model.findById(decodedToken._id);
+    if (!user) {
+        return next(new ApiError(401, 'Invalid access token'));
+    }
+    req.user = user;
+    next();
+})
