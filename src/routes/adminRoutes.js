@@ -7,7 +7,7 @@ const router = Router();
 router.post('/login', adminLogin)
 router.post('/signup', createAdmin)
 
-router.post('/studentRegister', isAuthenticated(Admin), studentRegistration);
+router.post('/studentRegister', isAuthenticated, studentRegistration);
 
 
 
