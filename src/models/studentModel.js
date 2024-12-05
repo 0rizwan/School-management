@@ -71,10 +71,16 @@ const studentSchema = new Schema({
         }
     }],
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
 addRequiredValidation(studentSchema, ['firstName', 'lastName', 'dateOfBirth', 'gender', 'password', 'street', 'pincode', 'city', 'state', 'country', 'contact phone number', 'contact email', 'parent relation', 'parent email', 'parent name', 'parent phone number'])
+
+studentSchema.virtual('flatEmail').get(function () {
+    return this.contact ? this.contact.email : this.email;
+});
 
 studentSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
