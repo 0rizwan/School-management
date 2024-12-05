@@ -1,91 +1,92 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { addRequiredValidation } from '../utils/schemaValidation.js'
 const Schema = mongoose.Schema;
 
 // Define the student schema
 const studentSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  dateOfBirth: {
-    type: Date,
-    required: true
-  },
-  gender: {
-    type: String,
-    enum: ['Male', 'Female', 'Other'],
-    required: true
-  },
-  address: {
-    street: {
-      type: String,
-      required: true
+    firstName: {
+        type: String,
+        trim: true
     },
-    city: {
-      type: String,
-      required: true
+    lastName: {
+        type: String,
+        trim: true
     },
-    state: {
-      type: String,
-      required: true
+    dateOfBirth: {
+        type: Date,
     },
-    zipCode: {
-      type: String,
-      required: true
+    gender: {
+        type: String,
+        enum: ['Male', 'Female', 'Other'],
     },
-    country: {
-      type: String,
-      required: true
-    }
-  },
-  contact: {
-    phoneNumber: {
-      type: String,
-      required: true,
-      unique: true
+    password: {
+        type: String,
     },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-      trim: true,
-      match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
-    }
-  },
-  parentDetails: [{
-    relation: {
-      type: String,
-      enum: ['Mother', 'Father', 'Guardian'],
-      required: true
+    address: {
+        street: {
+            type: String,
+        },
+        city: {
+            type: String,
+        },
+        state: {
+            type: String,
+        },
+        pinCode: {
+            type: String,
+        },
+        country: {
+            type: String,
+        }
     },
-    name: {
-      type: String,
-      required: true
+    contact: {
+        phoneNumber: {
+            type: String,
+            unique: true
+        },
+        email: {
+            type: String,
+            unique: true,
+            lowercase: true,
+            trim: true,
+            match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
+        }
     },
-    phoneNumber: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: true,
-      lowercase: true,
-      trim: true,
-      match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
-    }
-  }],
+    parentDetails: [{
+        relation: {
+            type: String,
+            enum: ['Mother', 'Father', 'Guardian'],
+        },
+        name: {
+            type: String,
+        },
+        phoneNumber: {
+            type: String,
+        },
+        email: {
+            type: String,
+            lowercase: true,
+            trim: true,
+            match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
+        }
+    }],
 }, {
-  timestamps: true
+    timestamps: true
 });
 
-// Create the Student model from the schema
-const Student = mongoose.model('Student', studentSchema);
+addRequiredValidation(studentSchema, ['firstName', 'lastName', 'dateOfBirth', 'gender', 'password', 'street', 'pincode', 'city', 'state', 'country', 'contact phone number', 'contact email', 'parent relation', 'parent email', 'parent name', 'parent phone number'])
 
-module.exports = Student;
+studentSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+})
+
+studentSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password, this.password)
+}
+
+// Create the Student model from the schema
+export const Student = mongoose.model('Student', studentSchema);
+
