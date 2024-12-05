@@ -2,6 +2,7 @@ import { ApiError } from "../utils/ApiError.js"
 import jwt from "jsonwebtoken"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js";
+import Admin from "../models/adminModel.js";
 
 const signToken = (id) => {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -17,7 +18,7 @@ export const createSendToken = (user, statusCode, res) => {
         secure: true
     }
 
-    res.cookie('jwt', token, cookieOptions)
+    res.cookie('accessToken', token, cookieOptions)
 
     //Remove password from output
 
@@ -33,27 +34,36 @@ export const createSendToken = (user, statusCode, res) => {
 }
 
 
+export const isAuthenticated = (Model) => {
+    return AsyncHandler(async (req, res, next) => {
+
+        if (req.cookies.accessToken) {
+            console.log("req.cookies", req.cookies.accessToken)
+        }
+
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
+        if (!token) {
+            return next(new ApiError(401, "Unauthorized request"));
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("decodedToken", decodedToken)
+        const user = await Model.findById(decodedToken.id);
+        if (!user) {
+            return next(new ApiError(401, 'Invalid access token'));
+        }
+        req.user = user;
+        next();
+    })
+}
+
+
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.body.role)) {
+        if (!roles.includes(req.user.role)) {
             return next(new ApiError(403, 'You do not have permission to perform this action'))
         }
         next()
     }
 
 }
-
-export const isAuthenticated = (Model) => AsyncHandler(async (req, res, next) => {
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    console.log(Model, "Model")
-    if (!token) {
-        return next(new ApiError(401, "Unauthorized request"));
-    }
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    const user = await Model.findById(decodedToken._id);
-    if (!user) {
-        return next(new ApiError(401, 'Invalid access token'));
-    }
-    req.user = user;
-    next();
-})
