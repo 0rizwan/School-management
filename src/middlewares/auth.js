@@ -33,24 +33,48 @@ export const createSendToken = (user, statusCode, res) => {
         }, "login successfull!"));
 }
 
-export const isAuthenticated = AsyncHandler(async (req, res, next) => {
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    if (!token) {
-        return next(new ApiError(401, "Unauthorized request"));
-    }
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await Admin.findById(decodedToken._id);
+// export const isAuthenticated = AsyncHandler(async (req, res, next) => {
+//     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+//     if (!token) {
+//         return next(new ApiError(401, "Unauthorized request"));
+//     }
+//     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+//     const user = await Admin.findById(decodedToken._id);
 
-    if (!user) {
-        return next(new ApiError(401, 'Invalid access token'));
-    }
-    req.user = user;
-    next();
-})
+//     if (!user) {
+//         return next(new ApiError(401, 'Invalid access token'));
+//     }
+//     req.user = user;
+//     next();
+// })
+
+export const isAuthenticated = (Model) => {
+    return AsyncHandler(async (req, res, next) => {
+
+        if (req.cookies.accessToken) {
+            console.log("req.cookies", req.cookies.accessToken)
+        }
+
+        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
+        if (!token) {
+            return next(new ApiError(401, "Unauthorized request"));
+        }
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("decodedToken", decodedToken)
+        const user = await Model.findById(decodedToken.id);
+        if (!user) {
+            return next(new ApiError(401, 'Invalid access token'));
+        }
+        req.user = user;
+        next();
+    })
+}
+
 
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(req.body.role)) {
+        if (!roles.includes(req.user.role)) {
             return next(new ApiError(403, 'You do not have permission to perform this action'))
         }
         next()
