@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 // Define the grade schema
@@ -21,13 +21,14 @@ const gradeSchema = new Schema({
 	},
 	gradingDate: {
 		type: Date,
-		default: Date.now
 	},
 	comments: {
 		type: String,
 		trim: true
 	}
 });
+
+addRequiredValidation(teacherSchema, ['firstName', 'lastName', 'email', 'phone', 'password', 'gender', 'street', 'pincode', 'city', 'state', 'country', 'dateOfBirth', 'hireDate', 'qualifications', 'experience'])
 
 // Create the Grade model from the schema
 const Grade = mongoose.model('Grade', gradeSchema);
