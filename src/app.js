@@ -7,8 +7,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limi: '10kb' }));
-app.use(cookieParser());
-
+app.use(cookieParser())
 app.use('/api/v1/user/login', adminRouter);
 app.use('/api/v1/admin', adminRouter);
 
