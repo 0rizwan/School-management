@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-import { addRequiredValidation } from '../utils/schemaValidation.js'
+import { addRequiredValidation } from '../utils/schemaValidation.js';
+import bcrypt from 'bcrypt';
+
 const Schema = mongoose.Schema;
 
 // Define the student schema

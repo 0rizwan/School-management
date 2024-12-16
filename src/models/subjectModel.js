@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Define the course schema
-const courseSchema = new Schema({
-    courseName: {
+// Define the subject schema
+const subjectSchema = new Schema({
+    subjectName: {
         type: String,
         required: true,
         unique: true
     },
-    courseCode: {
+    subjectCode: {
         type: String,
         required: true,
         unique: true
@@ -29,17 +29,7 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
-    dateCreated: {
-        type: Date,
-        default: Date.now
-    },
-    lastUpdated: {
-        type: Date,
-        default: Date.now
-    }
-});
+}, { timestamps: true });
 
-// Create the Course model from the schema
-const Course = mongoose.model('Course', courseSchema);
-
-module.exports = Course;
+// Create the subject model from the schema
+export const Subject = mongoose.model('subject', subjectSchema);
