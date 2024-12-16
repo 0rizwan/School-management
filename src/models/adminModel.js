@@ -34,7 +34,7 @@ const adminSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     }
-});
+}, { timestamps: true });
 
 // Middleware to hash the password before saving the admin
 adminSchema.pre('save', async function (next) {
@@ -50,6 +50,4 @@ adminSchema.methods.isValidPassword = async function (password) {
 };
 
 // Create the Admin model from the schema
-const Admin = mongoose.model('Admin', adminSchema);
-
-export default Admin;
+export const Admin = mongoose.model('Admin', adminSchema);
