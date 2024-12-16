@@ -31,6 +31,6 @@ const gradeSchema = new Schema({
 addRequiredValidation(teacherSchema, ['firstName', 'lastName', 'email', 'phone', 'password', 'gender', 'street', 'pincode', 'city', 'state', 'country', 'dateOfBirth', 'hireDate', 'qualifications', 'experience'])
 
 // Create the Grade model from the schema
-const Grade = mongoose.model('Grade', gradeSchema);
+export const Grade = mongoose.model('Grade', gradeSchema);
 
-module.exports = Grade;
+

@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { addRequiredValidation } from '../utils/schemaValidation.js'
+import bcrypt from 'bcrypt';
+
 const Schema = mongoose.Schema;
 
 // Define the student schema
@@ -49,7 +51,7 @@ const studentSchema = new Schema({
             unique: true,
             lowercase: true,
             trim: true,
-            match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
+            match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format'] // disable for side script
         }
     },
     parentDetails: [{
@@ -67,7 +69,7 @@ const studentSchema = new Schema({
             type: String,
             lowercase: true,
             trim: true,
-            match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format']
+            // match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format'] //disable for side script
         }
     }],
 }, {
@@ -78,10 +80,6 @@ const studentSchema = new Schema({
 
 addRequiredValidation(studentSchema, ['firstName', 'lastName', 'dateOfBirth', 'gender', 'password', 'street', 'pincode', 'city', 'state', 'country', 'contact phone number', 'contact email', 'parent relation', 'parent email', 'parent name', 'parent phone number'])
 
-studentSchema.virtual('flatEmail').get(function () {
-    return this.contact ? this.contact.email : this.email;
-});
-
 studentSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 10);
@@ -89,7 +87,7 @@ studentSchema.pre('save', async function (next) {
     next();
 })
 
-studentSchema.methods.isPasswordCorrect = async function (password) {
+studentSchema.methods.isValidPassword = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
 

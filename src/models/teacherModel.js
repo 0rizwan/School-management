@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { addRequiredValidation } from '../utils/schemaValidation.js'
+import bcrypt from 'bcrypt';
+
 const Schema = mongoose.Schema;
 
 // Define the student schema
@@ -17,6 +19,7 @@ const teacherSchema = new Schema({
         unique: true,
         lowercase: true,
         trim: true,
+        // match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format'] //disable for side script
     },
     phone: {
         type: String,
@@ -32,7 +35,7 @@ const teacherSchema = new Schema({
     }],
     gender: {
         type: String,
-        enum: ['Male', 'Female', 'Other'],
+        enum: ['Male', 'Female', 'Others'],
     },
     dateOfBirth: {
         type: Date,
@@ -67,17 +70,6 @@ const teacherSchema = new Schema({
             default: 'India',
         }
     },
-    emergencyContact: {
-        name: {
-            type: String,
-        },
-        relation: {
-            type: String,
-        },
-        phone: {
-            type: String,
-        },
-    },
     role: {
         type: String,
         enum: ['Teacher', 'HOD', 'Vice Principal', 'Principal'], // Roles within the teaching staff
@@ -100,7 +92,7 @@ teacherSchema.pre('save', async function (next) {
     next();
 })
 
-teacherSchema.methods.isPasswordCorrect = async function (password) {
+teacherSchema.methods.isValidPassword = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
 
