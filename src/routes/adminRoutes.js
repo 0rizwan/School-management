@@ -7,7 +7,7 @@ import { Student } from '../models/studentModel.js';
 import { Teacher } from '../models/teacherModel.js';
 const router = Router();
 
-router.post('/login',login)
+router.post('/login', login)
 router.post('/createAdmin', isAuthenticated(Admin), restrictTo("Super Admin"), createAdmin)
 
 router.post('/studentRegister',isAuthenticated(Admin), restrictTo("Super Admin", "Registrar", "Teacher Coordinator") , studentRegistration);
