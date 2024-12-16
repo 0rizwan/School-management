@@ -34,7 +34,11 @@ const adminSchema = new mongoose.Schema({
         enum: ['active', 'inactive', 'suspended'],
         default: 'active'
     }
-}, { timestamps: true });
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+    timestamps: true
+});
 
 // Middleware to hash the password before saving the admin
 adminSchema.pre('save', async function (next) {
