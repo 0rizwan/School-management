@@ -24,6 +24,5 @@ const enrollmentSchema = new Schema({
 });
 
 // Create the Enrollment model from the schema
-const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
+export const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
 
-module.exports = Enrollment;

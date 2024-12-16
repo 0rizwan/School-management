@@ -1,0 +1,242 @@
+[
+    {
+        "firstName": "Braden",
+        "lastName": "Suff",
+        "email": "bsuff0@gravatar.com",
+        "phone": "284-492-7629",
+        "department": "Secondary",
+        "subjects": "Foreign Language",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Bachelor of Science",
+        "experience": 11,
+        "address": [
+            {
+                "street": "64 Holmberg Terrace",
+                "city": "Boca Raton",
+                "state": "Florida",
+                "pincode": "#197244",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Gaspard",
+        "lastName": "Brosenius",
+        "email": "gbrosenius1@nifty.com",
+        "phone": "943-227-1371",
+        "department": "Pre-primary",
+        "subjects": "Computer Science",
+        "gender": "Others",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "PhD in Education",
+        "experience": 4,
+        "address": [
+            {
+                "street": "33 Montana Street",
+                "city": "Inglewood",
+                "state": "California",
+                "pincode": "#606f31",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Henrietta",
+        "lastName": "Insworth",
+        "email": "hinsworth2@jiathis.com",
+        "phone": "691-547-1507",
+        "department": "Secondary",
+        "subjects": "Math",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Associate Degree in Teaching",
+        "experience": 11,
+        "address": [
+            {
+                "street": "43 Mayer Pass",
+                "city": "Washington",
+                "state": "District of Columbia",
+                "pincode": "#457316",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Donnie",
+        "lastName": "Aspenlon",
+        "email": "daspenlon3@slashdot.org",
+        "phone": "608-382-9911",
+        "department": "Others",
+        "subjects": "History",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Teaching Certificate",
+        "experience": 2,
+        "address": [
+            {
+                "street": "4 Waxwing Place",
+                "city": "Rochester",
+                "state": "New York",
+                "pincode": "#2dc293",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Davin",
+        "lastName": "Wille",
+        "email": "dwille4@census.gov",
+        "phone": "852-578-3270",
+        "department": "Pre-primary",
+        "subjects": "English",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Associate Degree in Teaching",
+        "experience": 2,
+        "address": [
+            {
+                "street": "2296 Forest Dale Plaza",
+                "city": "Nashville",
+                "state": "Tennessee",
+                "pincode": "#a1c7d5",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Neel",
+        "lastName": "Haglington",
+        "email": "nhaglington5@e-recht24.de",
+        "phone": "621-411-4020",
+        "department": "Secondary",
+        "subjects": "Art",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Associate Degree in Teaching",
+        "experience": 5,
+        "address": [
+            {
+                "street": "618 Manitowish Plaza",
+                "city": "New Orleans",
+                "state": "Louisiana",
+                "pincode": "#338979",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Ezequiel",
+        "lastName": "Cutts",
+        "email": "ecutts6@simplemachines.org",
+        "phone": "659-447-5824",
+        "department": "High School",
+        "subjects": "Art",
+        "gender": "Female",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "PhD in Education",
+        "experience": 9,
+        "address": [
+            {
+                "street": "34 Dawn Junction",
+                "city": "Albany",
+                "state": "New York",
+                "pincode": "#9262ec",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Joane",
+        "lastName": "Tippell",
+        "email": "jtippell7@mozilla.org",
+        "phone": "978-819-8608",
+        "department": "High School",
+        "subjects": "Foreign Language",
+        "gender": "Others",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Associate Degree in Teaching",
+        "experience": 8,
+        "address": [
+            {
+                "street": "2674 Knutson Lane",
+                "city": "Henderson",
+                "state": "Nevada",
+                "pincode": "#5c75d9",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Dion",
+        "lastName": "Shead",
+        "email": "dshead8@edublogs.org",
+        "phone": "894-507-3099",
+        "department": "Others",
+        "subjects": "Physical Education",
+        "gender": "Male",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "Teaching Certificate",
+        "experience": 9,
+        "address": [
+            {
+                "street": "16 Texas Street",
+                "city": "Los Angeles",
+                "state": "California",
+                "pincode": "#e511d6",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    },
+    {
+        "firstName": "Bee",
+        "lastName": "Velte",
+        "email": "bvelte9@walmart.com",
+        "phone": "551-258-5376",
+        "department": "Primary",
+        "subjects": "Geography",
+        "gender": "Male",
+        "dateOfBirth": "12/11/2012",
+        "hireDate": "12/11/2012",
+        "qualifications": "PhD in Education",
+        "experience": 2,
+        "address": [
+            {
+                "street": "43 Petterle Park",
+                "city": "Fresno",
+                "state": "California",
+                "pincode": "#b69fcd",
+                "country": "United States"
+            }
+        ],
+        "role": "Teacher",
+        "isActive": "true"
+    }
+]
