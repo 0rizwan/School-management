@@ -1,5 +1,5 @@
 import { createSendToken } from "../middlewares/auth.js";
-import Admin from "../models/adminModel.js";
+import { Admin } from "../models/adminModel.js";
 import { Student } from "../models/studentModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
@@ -26,7 +26,7 @@ export const login = AsyncHandler(async (req, res, next) => {
             break;
     }
 
-    const user = await UserModel.findOne({ flatEmail: email }).select('+password');
+    const user = await UserModel.findOne({ email }).select('+password');
     console.log("USER", user)
 
     if (!user) {

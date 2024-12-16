@@ -2,7 +2,6 @@ import { ApiError } from "../utils/ApiError.js"
 import jwt from "jsonwebtoken"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js";
-import Admin from "../models/adminModel.js";
 
 const signToken = (id) => {
     return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
@@ -61,8 +60,10 @@ export const isAuthenticated = (Model) => {
             return next(new ApiError(401, "Unauthorized request"));
         }
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("decodedToken", decodedToken)
-        const user = await Model.findById(decodedToken.id);
+        console.log("decodedToken", decodedToken, Model)
+
+        const user = await Model.findById(decodedToken._id);
+        console.log(user, "authjs")
         if (!user) {
             return next(new ApiError(401, 'Invalid access token'));
         }
@@ -77,6 +78,6 @@ export const restrictTo = (...roles) => {
         if (!roles.includes(req.user.role)) {
             return next(new ApiError(403, 'You do not have permission to perform this action'))
         }
-        next()
+        next();
     }
 }
