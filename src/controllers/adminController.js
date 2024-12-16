@@ -1,4 +1,4 @@
-import Admin from "../models/adminModel.js"
+import { Admin } from "../models/adminModel.js"
 import { Student } from "../models/studentModel.js";
 import { ApiError } from '../utils/ApiError.js'
 import { AsyncHandler } from "../utils/AsyncHandler.js";
@@ -9,17 +9,20 @@ import { Class } from "../models/classModel.js";
 
 
 export const createAdmin = AsyncHandler(async (req, res, next) => {
+  const { name, email, password, role, status } = req.body;
 
   const newUser = await Admin.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    role: req.body.role,
-    status: req.body.status
+    name,
+    email,
+    password,
+    role,
+    status
   })
   newUser.password = undefined;
 
-  res.status(201).json(new ApiResponse(201, newUser, "User Created Successfully!"))
+  return res
+    .status(201)
+    .json(new ApiResponse(201, newUser, "User Created Successfully!"))
 })
 
 export const studentRegistration = AsyncHandler(async (req, res, next) => {
@@ -51,7 +54,6 @@ export const studentRegistration = AsyncHandler(async (req, res, next) => {
   return res
     .status(201)
     .json(new ApiResponse(201, newStudent, "Student registered successfully"))
-
 })
 
 export const teacherRegistration = AsyncHandler(async (req, res, next) => {

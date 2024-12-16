@@ -2,9 +2,6 @@ import { ApiError } from "../utils/ApiError.js"
 import jwt from "jsonwebtoken"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js";
-import Admin from "../models/adminModel.js";
-import {Teacher} from "../models/teacherModel.js";
-import {Student} from "../models/studentModel.js";
 
 const signToken = (id) => {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -81,6 +78,6 @@ export const restrictTo = (...roles) => {
         if (!roles.includes(req.user.role)) {
             return next(new ApiError(403, 'You do not have permission to perform this action'))
         }
-        next()
+        next();
     }
 }

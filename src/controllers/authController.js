@@ -1,5 +1,5 @@
 import { createSendToken } from "../middlewares/auth.js";
-import Admin from "../models/adminModel.js";
+import { Admin } from "../models/adminModel.js";
 import { Student } from "../models/studentModel.js";
 import { Teacher } from "../models/teacherModel.js";
 import { ApiError } from "../utils/ApiError.js";

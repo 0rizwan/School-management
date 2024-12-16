@@ -8,9 +8,9 @@ const enrollmentSchema = new Schema({
     ref: 'Student',
     required: true
   },
-  course: {
+  subject: {
     type: Schema.Types.ObjectId,
-    ref: 'Course',
+    ref: 'Subject',
     required: true
   },
   enrollmentDate: {
@@ -21,8 +21,7 @@ const enrollmentSchema = new Schema({
     type: String,
     required: true
   }
-});
+}, { timestamps: true });
 
 // Create the Enrollment model from the schema
 export const Enrollment = mongoose.model('Enrollment', enrollmentSchema);
-
