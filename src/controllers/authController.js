@@ -1,7 +1,6 @@
 import { createSendToken } from "../middlewares/auth.js";
 import { Admin } from "../models/adminModel.js";
 import { Student } from "../models/studentModel.js";
-import { Teacher } from "../models/teacherModel.js";
 import { ApiError } from "../utils/ApiError.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 
@@ -14,25 +13,21 @@ export const login = AsyncHandler(async (req, res, next) => {
     }
 
     let UserModel;
-    let queryObject = {}
 
     switch (userType) {
         case 'student':
             UserModel = Student;
-            queryObject['contact.email'] = email;
             break;
         case 'admin':
             UserModel = Admin;
-            queryObject['email'] = email;
             break;
         case 'teacher':
             UserModel = Teacher;
-            queryObject['email'] = email;
             break;
     }
 
-    
-    const user = await UserModel.findOne(queryObject).select('+password');
+    const user = await UserModel.findOne({ email }).select('+password');
+    console.log("USER", user)
 
     if (!user) {
         return next(new ApiError(401, `${userType} not found`))

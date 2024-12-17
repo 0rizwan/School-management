@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 
 const signToken = (id) => {
-    return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+    return jwt.sign({ _id: id }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
     })
 }
@@ -49,23 +49,24 @@ export const createSendToken = (user, statusCode, res) => {
 
 export const isAuthenticated = (Model) => {
     return AsyncHandler(async (req, res, next) => {
+
         if (req.cookies.accessToken) {
             console.log("req.cookies", req.cookies.accessToken)
         }
-        console.log()
+
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
 
         if (!token) {
             return next(new ApiError(401, "Unauthorized request"));
         }
-        
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("decodedToken", decodedToken, Model)
 
-        const user = await Model.findById(decodedToken.id);
+        const user = await Model.findById(decodedToken._id);
+        console.log(user, "authjs")
         if (!user) {
-            return next(new ApiError(401, `login in as authorized user`));
+            return next(new ApiError(401, 'Invalid access token'));
         }
-        console.log("user", user)
         req.user = user;
         next();
     })
@@ -74,7 +75,6 @@ export const isAuthenticated = (Model) => {
 
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
-        console.log(req.user.role, roles, "role")
         if (!roles.includes(req.user.role)) {
             return next(new ApiError(403, 'You do not have permission to perform this action'))
         }

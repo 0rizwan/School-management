@@ -31,5 +31,5 @@ const subjectSchema = new Schema({
     },
 }, { timestamps: true });
 
-// Create the Course model from the schema
-export const Subject = mongoose.model('Subject', subjectSchema);
+// Create the subject model from the schema
+export const Subject = mongoose.model('subject', subjectSchema);

@@ -5,8 +5,6 @@ import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { createSendToken } from "../middlewares/auth.js";
 import { Teacher } from "../models/teacherModel.js";
-import { Class } from "../models/classModel.js";
-
 
 export const createAdmin = AsyncHandler(async (req, res, next) => {
   const { name, email, password, role, status } = req.body;
@@ -57,14 +55,14 @@ export const studentRegistration = AsyncHandler(async (req, res, next) => {
 })
 
 export const teacherRegistration = AsyncHandler(async (req, res, next) => {
-  const { firstName, lastName, email, phone, department, subjects, gender, password, experience, qualifications, hireDate, dateOfBirth, address, role, isActive } = req.body;
+  const { firstName, lastName, contact, department, subjects, dateOfBirth, hireDate, qualifications, experience, gender, address, role } = req.body;
 
-  if (!firstName || !lastName || !dateOfBirth || !gender || !email || !department || !phone || !subjects || !qualifications || !experience || !hireDate || !role || !isActive || Object.keys(address).length == 0) {
+  if (!firstName || !lastName || !dateOfBirth || !gender || Object.keys(address).length == 0 || Object.keys(contact).length == 0 || Object.keys(parentDetails).length == 0) {
     return next(new ApiError(400, "All fields are required"));
   }
 
   const isTeacherExist = await Teacher.findOne({
-    $or: [{ 'phone': phone }, { 'email': email }]
+    $or: [{ 'contact.phoneNumber': contact.phoneNumber }, { 'contact.email': contact.email }]
   })
   if (isTeacherExist) {
     return next(new ApiError(400, "Teacher already exists"))
@@ -74,71 +72,21 @@ export const teacherRegistration = AsyncHandler(async (req, res, next) => {
   const newTeacher = await Teacher.create({
     firstName,
     lastName,
-    email,
-    phone,
     department,
     subjects,
-    gender,
-    experience,
-    qualifications,
-    hireDate,
     dateOfBirth,
-    address,
-    role,
-    isActive,
+    hireDate,
+    qualifications,
+    experience,
     password: generatedPassword,
+    gender,
+    address,
+    contact,
+    role
   })
 
-  newTeacher.password = undefined;
   return res
     .status(201)
     .json(new ApiResponse(201, newTeacher, "Teacher registered successfully"))
 
-})
-
-export const createClass = AsyncHandler(async (req, res, next) => {
-  const { name, classNumber, section, classTeacher, students, subjectTeacher, schedule } = req.body;
-
-  if (!name || !classNumber || !section || !classTeacher || !students || !subjectTeacher || !schedule) {
-    return next(new ApiError(400, "All fields are required"));
-  }
-
-  const isClassExist = await Class.findOne({ classNumber });
-
-  if (isClassExist) {
-    return next(new ApiError(400, "Class already exists"))
-  }
-
-
-  const newClass = await Class.create({
-    name, classNumber, section, classTeacher, students, subjectTeacher, schedule
-  })
-
-  // const populatedClass = await Class.findById(newClass._id)
-  //   .populate({ path: 'subjectTeacher.teacher', select: '-__v -updatedAt -createdAt -department -subjects -phone -role -password -experience -qualifications -hireDate -dateOfBirth -emergencyContact -email -address' })
-  //   .populate({ path: 'classTeacher', select: '-__v -updatedAt -createdAt -role -password -experience -qualifications -hireDate -dateOfBirth -emergencyContact -email -address' })
-  //   .populate({ path: 'students', select: '-__v -address -contact -dateOfBirth -password -parentDetails -updatedAt -createdAt' })
-  //   .lean()
-
-  return res.status(201).json(new ApiResponse(201, populatedClass, "Class created Successfully"));
-
-})
-
-
-export const getAllStudent = AsyncHandler(async(req, res, next) => {
-  const doc = await Student.find();
-
-  res.status(200).json(new ApiResponse(200, doc))
-})
-
-export const getAllClass = AsyncHandler(async(req, res, next) => {
-  const doc = await Class.find().populate("classTeacher").populate("students");
-
-  res.status(200).json(new ApiResponse(200, doc))
-})
-
-export const getAllTeacher = AsyncHandler(async(req, res, next) => {
-  const doc = await Teacher.find();
-
-  res.status(200).json(new ApiResponse(200, doc))
 })
