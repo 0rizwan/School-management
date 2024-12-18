@@ -1,27 +1,10 @@
 import mongoose from 'mongoose';
 import { addRequiredValidation } from '../utils/schemaValidation.js'
-import bcrypt from 'bcrypt';
-
-const Schema = mongoose.Schema;
+import { User } from './userModel.js';
 
 // Define the student schema
-const teacherSchema = new Schema({
-    firstName: {
-        type: String,
-        trim: true,
-    },
-    lastName: {
-        type: String,
-        trim: true,
-    },
-    email: {
-        type: String,
-        unique: true,
-        lowercase: true,
-        trim: true,
-        // match: [/^[a-z0-9]+@([a-z]+\.)+[a-z]{2,4}$/i, 'Invalid email format'] //disable for side script
-    },
-    phone: {
+const teacherSchema = new mongoose.Schema({
+    phoneNumber: {
         type: String,
         unique: true,
         trim: true,
@@ -48,9 +31,6 @@ const teacherSchema = new Schema({
     },
     experience: {
         type: Number, // in years
-    },
-    password: {
-        type: String,
     },
     address: {
         street: {
@@ -83,19 +63,7 @@ const teacherSchema = new Schema({
     timestamps: true
 });
 
-addRequiredValidation(teacherSchema, ['firstName', 'lastName', 'email', 'phone', 'password', 'gender', 'street', 'pincode', 'city', 'state', 'country', 'dateOfBirth', 'hireDate', 'qualifications', 'experience'])
-
-teacherSchema.pre('save', async function (next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 10);
-    }
-    next();
-})
-
-teacherSchema.methods.isValidPassword = async function (password) {
-    return await bcrypt.compare(password, this.password)
-}
+addRequiredValidation(teacherSchema, ['phoneNumber', 'gender', 'street', 'pincode', 'city', 'state', 'country', 'dateOfBirth', 'hireDate', 'qualifications', 'experience'])
 
 // Create the Student model from the schema
-export const Teacher = mongoose.model('Teacher', teacherSchema);
-
+export const Teacher = User.discriminator('teacher', teacherSchema);

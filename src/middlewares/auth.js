@@ -1,16 +1,17 @@
-import { ApiError } from "../utils/ApiError.js"
 import jwt from "jsonwebtoken"
+import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { AsyncHandler } from "../utils/AsyncHandler.js";
+import { User } from "../models/userModel.js";
 
-const signToken = (id) => {
-    return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+const signToken = (user) => {
+    return jwt.sign({ _id: user._id, userType: user.userType }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES_IN
     })
 }
 
 export const createSendToken = (user, statusCode, res) => {
-    const token = signToken(user._id)
+    const token = signToken(user)
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
         httpOnly: true,
@@ -32,51 +33,27 @@ export const createSendToken = (user, statusCode, res) => {
         }, "login successfull!"));
 }
 
-// export const isAuthenticated = AsyncHandler(async (req, res, next) => {
-//     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-//     if (!token) {
-//         return next(new ApiError(401, "Unauthorized request"));
-//     }
-//     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-//     const user = await Admin.findById(decodedToken._id);
+export const isAuthenticated = AsyncHandler(async (req, res, next) => {
+    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) {
+        return next(new ApiError(401, "Unauthorized request"));
+    }
 
-//     if (!user) {
-//         return next(new ApiError(401, 'Invalid access token'));
-//     }
-//     req.user = user;
-//     next();
-// })
-
-export const isAuthenticated = (Model) => {
-    return AsyncHandler(async (req, res, next) => {
-        if (req.cookies.accessToken) {
-            console.log("req.cookies", req.cookies.accessToken)
-        }
-        console.log()
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-
-        if (!token) {
-            return next(new ApiError(401, "Unauthorized request"));
-        }
-        
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-        const user = await Model.findById(decodedToken.id);
-        if (!user) {
-            return next(new ApiError(401, `login in as authorized user`));
-        }
-        console.log("user", user)
-        req.user = user;
-        next();
-    })
-}
-
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decodedToken._id);
+    if (!user) {
+        return next(new ApiError(404, "User not found"));
+    }
+    req.user = user;
+    next();
+})
 
 export const restrictTo = (...roles) => {
     return (req, res, next) => {
-        console.log(req.user.role, roles, "role")
-        if (!roles.includes(req.user.role)) {
-            return next(new ApiError(403, 'You do not have permission to perform this action'))
+        if (req.user.role != "super admin") {
+            if (!roles.includes(req.user.role)) {
+                return next(new ApiError(403, 'You do not have permission to perform this action'))
+            }
         }
         next();
     }
